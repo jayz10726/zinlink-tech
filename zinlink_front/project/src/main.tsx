@@ -5,7 +5,20 @@ import App from './App';
 import './index.css';
 import ErrorBoundary from './components/ErrorBoundary';
 
-createRoot(document.getElementById('root')!).render(
+console.log('Starting React application...');
+
+const rootElement = document.getElementById('root');
+if (!rootElement) {
+  throw new Error('Root element not found');
+}
+
+console.log('Root element found, creating React root...');
+
+const root = createRoot(rootElement);
+
+console.log('Rendering React application...');
+
+root.render(
   <StrictMode>
     <ErrorBoundary>
       <BrowserRouter>
@@ -14,3 +27,5 @@ createRoot(document.getElementById('root')!).render(
     </ErrorBoundary>
   </StrictMode>
 );
+
+console.log('React application rendered successfully');

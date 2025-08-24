@@ -1,8 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Users, Award, Clock, MapPin, Phone, Mail, CheckCircle, Star } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { apiService, ApiTeamMember } from '../services/api';
 
 const About = () => {
-  const teamMembers = [
+  const navigate = useNavigate();
+  const [teamMembers, setTeamMembers] = useState<ApiTeamMember[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchTeamMembers = async () => {
+      try {
+        const response = await apiService.getTeam();
+        setTeamMembers(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError('Failed to load team members');
+        setLoading(false);
+      }
+    };
+
+    fetchTeamMembers();
+  }, []);
+
+  // Fallback team members if API fails
+  const fallbackTeamMembers = [
     {
       name: "George smart",
       role: "Founder & Lead Technician",
@@ -173,25 +196,121 @@ const About = () => {
       </div>
 
       {/* Team */}
-      <div className="bg-white py-16">
+      <div className="bg-gradient-to-br from-gray-50 to-white py-20">
         <div className="container">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 text-center mb-12">
-            Our Team
-          </h2>
-          <div className="grid md:grid-cols-3 gap-8">
-            {teamMembers.map((member, index) => (
-              <div key={index} className="bg-gray-50 rounded-xl p-6 text-center">
-                <div className="w-20 h-20 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Users className="w-10 h-10 text-white" />
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Meet Our Expert Team
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Our certified technicians and professionals are dedicated to providing you with the best computer solutions and exceptional service.
+            </p>
+          </div>
+          
+          {loading ? (
+            <div className="text-center py-16">
+              <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-600 border-t-transparent mx-auto mb-6"></div>
+              <p className="text-gray-500 text-lg font-medium">Loading our amazing team...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-16">
+              <div className="bg-red-50 border border-red-200 rounded-2xl p-8 max-w-md mx-auto">
+                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+                  </svg>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  {member.name}
-                </h3>
-                <p className="text-blue-600 font-medium mb-2">{member.role}</p>
-                <p className="text-sm text-gray-600 mb-3">{member.experience} experience</p>
-                <p className="text-sm text-gray-500">{member.specialty}</p>
+                <p className="text-red-600 text-lg font-semibold mb-2">{error}</p>
+                <p className="text-gray-600">Showing fallback team information</p>
               </div>
-            ))}
+            </div>
+          ) : null}
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {(teamMembers.length > 0 ? teamMembers : fallbackTeamMembers).map((member, index) => {
+              // Type guard to check if it's an API team member
+              const isApiMember = 'photo_url' in member;
+              
+              return (
+                <div key={index} className="group relative">
+                  <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden">
+                    {/* Photo Section */}
+                    <div className="relative h-64 bg-gradient-to-br from-blue-500 to-purple-600">
+                      {isApiMember && member.photo_url ? (
+                        <img 
+                          src={member.photo_url} 
+                          alt={member.name}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <Users className="w-20 h-20 text-white opacity-80" />
+                        </div>
+                      )}
+                      {/* Overlay gradient */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                      
+                      {/* Role badge */}
+                      <div className="absolute bottom-4 left-4 right-4">
+                        <span className="inline-block bg-white/90 backdrop-blur-sm text-gray-800 px-3 py-1 rounded-full text-sm font-semibold">
+                          {member.role || 'Team Member'}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* Content Section */}
+                    <div className="p-6">
+                      <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors duration-300">
+                        {member.name}
+                      </h3>
+                      
+                      {isApiMember && member.bio ? (
+                        <p className="text-gray-600 leading-relaxed mb-4 line-clamp-3">
+                          {member.bio}
+                        </p>
+                      ) : !isApiMember ? (
+                        <div className="space-y-2 mb-4">
+                          <p className="text-sm text-gray-600">
+                            <span className="font-semibold text-blue-600">{(member as any).experience}</span> experience
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            {(member as any).specialty}
+                          </p>
+                        </div>
+                      ) : null}
+                      
+                      {/* Experience badge for API members */}
+                      {isApiMember && (
+                        <div className="flex items-center justify-center space-x-2 text-sm text-gray-500">
+                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                          <span>Available for consultation</span>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Hover effect border */}
+                    <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-blue-500 transition-colors duration-300 pointer-events-none"></div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          
+          {/* Call to action */}
+          <div className="text-center mt-16">
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white">
+              <h3 className="text-2xl font-bold mb-4">Ready to Work With Our Team?</h3>
+              <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
+                Our expert technicians are ready to help you with all your computer needs. 
+                From repairs to installations, we've got you covered.
+              </p>
+              <button 
+                onClick={() => navigate('/contact')}
+                className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors duration-300 transform hover:scale-105"
+              >
+                Contact Us Today
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -1,10 +1,9 @@
 import { Link } from 'react-router-dom';
 import { Star, ChevronRight, Shield, Clock, Users, Award, CheckCircle, ArrowRight, Phone, MapPin } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { apiService, ApiImage } from '../../services/api';
 import { motion } from 'framer-motion';
 
-const fallbackImages = [
+const carouselImages = [
   {
     url: 'https://images.pexels.com/photos/1181354/pexels-photo-1181354.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&dpr=2',
     alt: 'IT support team working together',
@@ -24,24 +23,10 @@ const fallbackImages = [
 ];
 
 const Hero = () => {
-  const [carouselImages, setCarouselImages] = useState<{url: string, alt: string}[]>(fallbackImages);
   const [current, setCurrent] = useState(0);
   const [parallax, setParallax] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    // Fetch hero images from backend
-    apiService.getHeroImages()
-      .then(response => {
-        if (response.success && response.data && response.data.length > 0) {
-          setCarouselImages(response.data.map((img: ApiImage) => ({
-            url: img.image_url.startsWith('http') ? img.image_url : `http://localhost:8000/storage/${img.image_url}`,
-            alt: img.alt_text || img.name || 'Hero image',
-          })));
-        }
-      })
-      .catch(() => {
-        setCarouselImages(fallbackImages);
-      });
     // Parallax mouse move
     const handleMouseMove = (e: MouseEvent) => {
       const x = (e.clientX / window.innerWidth - 0.5) * 30;

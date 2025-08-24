@@ -1,0 +1,74 @@
+name: Deploy to Truehost cPanel
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.1'
+        extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, dom, filter, gd, iconv, json, mbstring, pdo, xml
+        tools: composer:v2
+        
+    - name: Install Frontend Dependencies
+      working-directory: ./zinlink_front/project
+      run: npm ci
+      
+    - name: Build Frontend
+      working-directory: ./zinlink_front/project
+      run: npm run build
+      
+    - name: Install Backend Dependencies
+      working-directory: ./admin_zinlink
+      run: composer install --optimize-autoloader --no-dev
+      
+    - name: Deploy to cPanel
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: ${{ secrets.CPANEL_HOST }}
+        username: ${{ secrets.CPANEL_USERNAME }}
+        password: ${{ secrets.CPANEL_PASSWORD }}
+        port: ${{ secrets.CPANEL_PORT }}
+        source: "zinlink_front/project/dist/*"
+        target: "/public_html/"
+        strip_components: 3
+        
+    - name: Deploy Backend to cPanel
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: ${{ secrets.CPANEL_HOST }}
+        username: ${{ secrets.CPANEL_USERNAME }}
+        password: ${{ secrets.CPANEL_PASSWORD }}
+        port: ${{ secrets.CPANEL_PORT }}
+        source: "admin_zinlink/*"
+        target: "/public_html/api/"
+        strip_components: 1
+        
+    - name: Set Permissions
+      uses: appleboy/ssh-action@v0.1.5
+      with:
+        host: ${{ secrets.CPANEL_HOST }}
+        username: ${{ secrets.CPANEL_USERNAME }}
+        password: ${{ secrets.CPANEL_PASSWORD }}
+        port: ${{ secrets.CPANEL_PORT }}
+        script: |
+          cd /public_html/api
+          chmod -R 755 storage/
+          chmod -R 755 bootstrap/cache/
+          php artisan storage:link 

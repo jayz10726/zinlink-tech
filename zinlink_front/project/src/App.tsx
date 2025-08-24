@@ -15,6 +15,8 @@ import { CartProvider } from './context/CartContext';
 import { ToastProvider } from './context/ToastContext';
 
 function App() {
+  console.log('App component rendering...');
+  
   return (
     <ToastProvider>
       <CartProvider>

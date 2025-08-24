@@ -2,11 +2,9 @@ import Hero from '../components/home/Hero';
 import FeaturedProducts from '../components/home/FeaturedProducts';
 import { Link } from 'react-router-dom';
 import { CheckCircle, Award, Users, Clock, ArrowRight, ShoppingCart, Phone, Star } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { apiService } from '../services/api';
 import { motion } from 'framer-motion';
 
-const fallbackFeatures = [
+const features = [
   { icon: '💻', title: 'Expert Repairs', description: 'Chip-level repairs by certified technicians.' },
   { icon: '⚡', title: 'Quick Service', description: 'Fast turnaround for all repairs and upgrades.' },
   { icon: '🤝', title: 'Trusted Support', description: '500+ happy customers and 3+ years experience.' },
@@ -14,23 +12,6 @@ const fallbackFeatures = [
 ];
 
 const Home = () => {
-  const [features, setFeatures] = useState(fallbackFeatures);
-
-  useEffect(() => {
-    fetch('http://localhost:8000/api/features')
-      .then(res => res.json())
-      .then(data => {
-        if (data.success && data.data && data.data.length > 0) {
-          setFeatures(data.data.map((f: any) => ({
-            icon: f.icon || '⭐',
-            title: f.title,
-            description: f.description,
-          })));
-        }
-      })
-      .catch(() => setFeatures(fallbackFeatures));
-  }, []);
-
   return (
     <div>
       <Hero />

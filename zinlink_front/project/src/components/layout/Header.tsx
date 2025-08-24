@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Laptop, ShoppingCart, Menu, X, Search, Home, Package, Phone, Settings, Star, Info } from 'lucide-react';
+import { Laptop, ShoppingCart, Menu, X, Search, Home, Package, Phone, Settings, Star, Info, Lock } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [adminPassword, setAdminPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const { cart, getCartItemCount, getCartTotal } = useCart();
   const location = useLocation();
   
@@ -59,6 +62,50 @@ const Header = () => {
     return () => window.removeEventListener('popstate', checkAdminPage);
   }, []);
 
+  // Handle admin button click - show password modal
+  const handleAdminClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setShowPasswordModal(true);
+    setAdminPassword('');
+    setPasswordError('');
+  };
+
+  // Handle password submission
+  const handlePasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPasswordError('');
+
+    try {
+      // Send password to backend for verification
+      const response = await fetch('http://localhost:8000/api/verify-admin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password: adminPassword }),
+      });
+
+      if (response.ok) {
+        // Password correct - redirect to admin panel
+        setShowPasswordModal(false);
+        setAdminPassword('');
+        window.open('http://localhost:8000/admin', '_blank');
+      } else {
+        // Password incorrect
+        setPasswordError('Incorrect password. Please try again.');
+      }
+    } catch (error) {
+      setPasswordError('Connection error. Please try again.');
+    }
+  };
+
+  // Close password modal
+  const closePasswordModal = () => {
+    setShowPasswordModal(false);
+    setAdminPassword('');
+    setPasswordError('');
+  };
+
   const navLinkClasses = ({ isActive }: { isActive: boolean }) => 
     `flex items-center space-x-2 px-4 py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 ${
       isActive 
@@ -93,10 +140,10 @@ const Header = () => {
     { to: '/about', label: 'About', icon: Info },
     { to: '/contact', label: 'Contact', icon: Phone },
     { to: '/reviews', label: 'Reviews', icon: Star },
-    { to: 'http://localhost:8000/admin', label: 'Admin', icon: Settings, external: true },
   ];
 
   return (
+    <>
     <header 
       className={`sticky top-0 z-50 transition-all duration-300 ${
         isScrolled 
@@ -108,7 +155,7 @@ const Header = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2 group">
           <div className="p-2 rounded-lg bg-secondary-600 group-hover:bg-secondary-700 transition-colors duration-300">
-            <Laptop className="w-6 h-6 text-white" />
+              <Laptop className="w-6 w-6 text-white" />
           </div>
           <span className="text-2xl font-extrabold bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent drop-shadow-lg tracking-tight font-display">
             <span className="pr-1">zinlink</span><span className="text-white bg-black/30 px-2 py-0.5 rounded-lg ml-1 shadow-md">tech</span>
@@ -117,30 +164,26 @@ const Header = () => {
         
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-2">
-          {navItems.map(({ to, label, icon: Icon, external }) => (
-            external ? (
-              <a 
-                key={to} 
-                href={to} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className={label === 'Admin' ? adminLinkClasses() : "flex items-center space-x-2 px-4 py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 text-gray-700 hover:bg-secondary-50 hover:text-secondary-600"}
-              >
-                <Icon className="w-4 h-4" />
-                <span>{label}</span>
-                {label === 'Admin' && isAdminPage && (
-                  <span className="ml-1 px-1.5 py-0.5 text-xs bg-green-500 text-white rounded-full animate-pulse">
-                    Active
-                  </span>
-                )}
-              </a>
-            ) : (
+            {navItems.map(({ to, label, icon: Icon }) => (
               <NavLink key={to} to={to} className={navLinkClasses}>
                 <Icon className="w-4 h-4" />
                 <span>{label}</span>
               </NavLink>
-            )
-          ))}
+            ))}
+            
+            {/* Admin Button with Lock Icon */}
+            <button 
+              onClick={handleAdminClick}
+              className="flex items-center space-x-2 px-4 py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 text-gray-700 hover:bg-secondary-50 hover:text-secondary-600"
+            >
+              <Lock className="w-4 h-4" />
+              <span>Admin</span>
+              {isAdminPage && (
+                <span className="ml-1 px-1.5 py-0.5 text-xs bg-green-500 text-white rounded-full animate-pulse">
+                  Active
+                </span>
+              )}
+            </button>
         </nav>
         
         {/* Search and Cart */}
@@ -218,7 +261,7 @@ const Header = () => {
           </div>
         </div>
         
-        {/* Mobile Cart */}
+          {/* Mobile Cart and Menu */}
         <div className="flex md:hidden items-center space-x-2">
           <Link to="/cart" className="relative p-2 rounded-lg hover:bg-secondary-50 transition-all duration-300">
             <ShoppingCart className="w-6 h-6 text-gray-700" />
@@ -252,36 +295,86 @@ const Header = () => {
               <Search className="absolute left-3 top-3.5 w-5 h-5 text-gray-400" />
             </form>
             <nav className="flex flex-col space-y-2">
-              {navItems.map(({ to, label, icon: Icon, external }) => (
-                external ? (
-                  <a 
-                    key={to} 
-                    href={to} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className={label === 'Admin' ? mobileAdminLinkClasses() : "flex items-center space-x-3 px-4 py-3 rounded-lg font-medium transition-all duration-300 text-gray-700 hover:bg-secondary-50 hover:text-secondary-600"}
-                    onClick={toggleMenu}
-                  >
-                    <Icon className="w-5 h-5" />
-                    <span>{label}</span>
-                    {label === 'Admin' && isAdminPage && (
-                      <span className="ml-1 px-1.5 py-0.5 text-xs bg-green-500 text-white rounded-full animate-pulse">
-                        Active
-                      </span>
-                    )}
-                  </a>
-                ) : (
+                {navItems.map(({ to, label, icon: Icon }) => (
                   <NavLink key={to} to={to} className={mobileNavLinkClasses} onClick={toggleMenu}>
                     <Icon className="w-5 h-5" />
                     <span>{label}</span>
                   </NavLink>
-                )
-              ))}
+                ))}
+                
+                {/* Mobile Admin Button */}
+                <button 
+                  onClick={() => {
+                    toggleMenu();
+                    handleAdminClick({ preventDefault: () => {} } as React.MouseEvent);
+                  }}
+                  className="flex items-center space-x-3 px-4 py-3 rounded-lg font-medium transition-all duration-300 text-gray-700 hover:bg-secondary-50 hover:text-secondary-600"
+                >
+                  <Lock className="w-5 h-5" />
+                  <span>Admin</span>
+                  {isAdminPage && (
+                    <span className="ml-1 px-1.5 py-0.5 text-xs bg-green-500 text-white rounded-full animate-pulse">
+                      Active
+                    </span>
+                  )}
+                </button>
             </nav>
           </div>
         </div>
       )}
     </header>
+
+      {/* Password Modal */}
+      {showPasswordModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full transform transition-all duration-300 scale-100">
+            <div className="text-center mb-6">
+              <div className="mx-auto w-16 h-16 bg-secondary-100 rounded-full flex items-center justify-center mb-4">
+                <Lock className="w-8 h-8 text-secondary-600" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-2">Admin Access</h2>
+              <p className="text-gray-600">Enter password to access admin panel</p>
+            </div>
+            
+            <form onSubmit={handlePasswordSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="adminPassword" className="block text-sm font-medium text-gray-700 mb-2">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  id="adminPassword"
+                  value={adminPassword}
+                  onChange={(e) => setAdminPassword(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:border-secondary-500 transition-all duration-300"
+                  placeholder="Enter admin password"
+                  autoFocus
+                />
+                {passwordError && (
+                  <p className="text-red-500 text-sm mt-1">{passwordError}</p>
+                )}
+              </div>
+              
+              <div className="flex space-x-3 pt-4">
+                <button
+                  type="button"
+                  onClick={closePasswordModal}
+                  className="flex-1 px-4 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-300"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-3 bg-secondary-600 text-white rounded-lg hover:bg-secondary-700 transition-colors duration-300 font-medium"
+                >
+                  Access Admin
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

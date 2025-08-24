@@ -60,7 +60,7 @@ const Contact = () => {
                   <MapPin className="w-5 h-5 text-secondary-600 mt-1 flex-shrink-0" />
                   <div>
                     <p className="font-medium text-gray-900">Address</p>
-                    <p className="text-gray-600 text-sm">Tivoli centre  shop 1 c<br /></p>
+                    <p className="text-gray-600 text-sm">Mamboleo<br /></p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">

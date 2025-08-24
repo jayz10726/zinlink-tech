@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = '/api';
 
 export interface ApiProduct {
   id: number;
@@ -158,6 +158,15 @@ export async function createOrder(data: CreateOrderData) {
     body: JSON.stringify(data),
   });
   return response.json();
+}
+
+export interface ApiTeamMember {
+  id: number;
+  name: string;
+  role?: string;
+  bio?: string;
+  photo_url?: string;
+  sort_order: number;
 }
 
 class ApiService {
@@ -416,6 +425,11 @@ class ApiService {
   // Get review statistics
   async getReviewStats(): Promise<ApiResponse<ReviewStats>> {
     return this.request<ReviewStats>('/reviews/stats');
+  }
+
+  // Get team members
+  async getTeam(): Promise<ApiResponse<ApiTeamMember[]>> {
+    return this.request<ApiTeamMember[]>('/team');
   }
 
   // Health check

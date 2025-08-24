@@ -92,7 +92,7 @@ const OrderConfirmation = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
               <div>
                 <p className="font-medium text-gray-900">Phone:</p>
-                <p className="text-gray-600">0706850126</p>
+                <p className="text-gray-600">0746049506</p>
               </div>
               <div>
                 <p className="font-medium text-gray-900">Email:</p>
