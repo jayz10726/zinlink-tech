@@ -16,7 +16,7 @@ if [ $? -eq 0 ]; then
     echo "1. Upload the contents of 'dist' folder to your cPanel public_html directory"
     echo "2. Make sure your domain points to the public_html folder"
     echo "3. Update your backend API URL in the production environment"
-    echo ""
+echo ""
     echo "🌐 Your website will be available at your domain"
 else
     echo "❌ Build failed! Please check the error messages above."

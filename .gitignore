@@ -1,0 +1,62 @@
+# Dependencies
+node_modules/
+vendor/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Production builds
+dist/
+build/
+public/build/
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Laravel specific
+storage/logs/
+storage/framework/cache/
+storage/framework/sessions/
+storage/framework/views/
+bootstrap/cache/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Uploaded files
+storage/app/public/uploads/
+public/uploads/
+
+# Database
+*.sqlite
+*.db
+
+# Composer
+composer.phar
+
+# Deployment packages
+*.zip
+deployment_package/
+final_deployment_package/ 

@@ -1,8 +1,8 @@
-name: Deploy to Truehost cPanel
+name: 🚀 Deploy to Truehost
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
   workflow_dispatch:
 
 jobs:
@@ -10,65 +10,77 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
       
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
+    - name: 🟢 Setup Node.js
+      uses: actions/setup-node@v4
       with:
         node-version: '18'
         cache: 'npm'
+        cache-dependency-path: zinlink_front/project/package-lock.json
         
-    - name: Setup PHP
+    - name: 📦 Install frontend dependencies
+      working-directory: zinlink_front/project
+      run: npm ci
+      
+    - name: 🏗️ Build frontend
+      working-directory: zinlink_front/project
+      run: npm run build
+      
+    - name: 🐘 Setup PHP
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.1'
         extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, dom, filter, gd, iconv, json, mbstring, pdo, xml
-        tools: composer:v2
+        coverage: none
         
-    - name: Install Frontend Dependencies
-      working-directory: ./zinlink_front/project
-      run: npm ci
+    - name: 📦 Install backend dependencies
+      working-directory: admin_zinlink
+      run: composer install --no-dev --optimize-autoloader
       
-    - name: Build Frontend
-      working-directory: ./zinlink_front/project
-      run: npm run build
+    - name: 🔑 Generate Laravel key
+      working-directory: admin_zinlink
+      run: php artisan key:generate --no-interaction
       
-    - name: Install Backend Dependencies
-      working-directory: ./admin_zinlink
-      run: composer install --optimize-autoloader --no-dev
-      
-    - name: Deploy to cPanel
-      uses: appleboy/scp-action@v0.1.4
+    - name: 📁 Create deployment package
+      run: |
+        mkdir -p deployment_temp
+        cp -r zinlink_front/project/dist/* deployment_temp/
+        cp -r admin_zinlink deployment_temp/api
+        cp admin_zinlink/.env.example deployment_temp/api/.env
+        echo "Deployment package created successfully"
+        
+    - name: 📤 Deploy to Truehost
+      uses: appleboy/scp-action@v0.1.7
       with:
-        host: ${{ secrets.CPANEL_HOST }}
-        username: ${{ secrets.CPANEL_USERNAME }}
-        password: ${{ secrets.CPANEL_PASSWORD }}
-        port: ${{ secrets.CPANEL_PORT }}
-        source: "zinlink_front/project/dist/*"
+        host: ${{ secrets.TRUEHOST_HOST }}
+        username: ${{ secrets.TRUEHOST_USERNAME }}
+        password: ${{ secrets.TRUEHOST_PASSWORD }}
+        port: ${{ secrets.TRUEHOST_PORT }}
+        source: "deployment_temp/*"
         target: "/public_html/"
-        strip_components: 3
-        
-    - name: Deploy Backend to cPanel
-      uses: appleboy/scp-action@v0.1.4
-      with:
-        host: ${{ secrets.CPANEL_HOST }}
-        username: ${{ secrets.CPANEL_USERNAME }}
-        password: ${{ secrets.CPANEL_PASSWORD }}
-        port: ${{ secrets.CPANEL_PORT }}
-        source: "admin_zinlink/*"
-        target: "/public_html/api/"
         strip_components: 1
         
-    - name: Set Permissions
-      uses: appleboy/ssh-action@v0.1.5
+    - name: 🔧 Run deployment commands
+      uses: appleboy/ssh-action@v1.0.3
       with:
-        host: ${{ secrets.CPANEL_HOST }}
-        username: ${{ secrets.CPANEL_USERNAME }}
-        password: ${{ secrets.CPANEL_PASSWORD }}
-        port: ${{ secrets.CPANEL_PORT }}
+        host: ${{ secrets.TRUEHOST_HOST }}
+        username: ${{ secrets.TRUEHOST_USERNAME }}
+        password: ${{ secrets.TRUEHOST_PASSWORD }}
+        port: ${{ secrets.TRUEHOST_PORT }}
         script: |
-          cd /public_html/api
-          chmod -R 755 storage/
-          chmod -R 755 bootstrap/cache/
-          php artisan storage:link 
+          cd /public_html
+          chmod -R 755 api/storage/
+          chmod -R 755 api/bootstrap/cache/
+          cd api
+          php artisan storage:link
+          php artisan migrate --force
+          php artisan db:seed --force
+          echo "🚀 Deployment completed successfully!"
+          
+    - name: 🧹 Cleanup
+      run: rm -rf deployment_temp
+      
+    - name: ✅ Deployment Status
+      run: echo "🎉 Zinlink Tech deployed successfully to Truehost!" 

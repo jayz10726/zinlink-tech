@@ -1,47 +1,41 @@
-# 🚀 Zinlink Tech - Professional Computer Solutions
+# 🚀 Zinlink Tech - Complete E-commerce Solution
 
-A modern, responsive website for Zinlink Tech, a computer solutions company in Kisumu City, Kenya. Built with React frontend and Laravel backend.
+A modern, full-stack e-commerce platform built with React frontend and Laravel backend.
 
-## 🌟 Features
+## ✨ Features
 
-### Frontend (React + TypeScript)
-- ✅ **Modern, responsive design**
-- ✅ **Product catalog** with filtering and search
-- ✅ **Shopping cart** functionality
-- ✅ **Team member showcase** with photos
-- ✅ **Contact forms** and WhatsApp integration
-- ✅ **Admin panel** for content management
-- ✅ **Mobile-optimized** interface
-
-### Backend (Laravel)
-- ✅ **RESTful API** for frontend
-- ✅ **Admin dashboard** for content management
-- ✅ **Product management** system
-- ✅ **Team member management** with photo uploads
-- ✅ **Order management** system
-- ✅ **User authentication** and authorization
-- ✅ **Image management** system
+- 🛍️ **Modern E-commerce Frontend** - React with Tailwind CSS
+- 🔧 **Powerful Admin Panel** - Laravel backend with full CRUD operations
+- 📱 **Mobile Responsive** - Works perfectly on all devices
+- 🛒 **Shopping Cart** - Full cart functionality with persistence
+- 👥 **Team Management** - Add and manage team members
+- 📦 **Product Management** - Complete product catalog system
+- ⭐ **Review System** - Customer reviews and ratings
+- 📞 **WhatsApp Integration** - Direct customer communication
+- 🔐 **User Authentication** - Secure login system
+- 📊 **Order Management** - Complete order tracking
 
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **React 18** with TypeScript
-- **Vite** for build tooling
-- **Tailwind CSS** for styling
-- **React Router** for navigation
-- **Lucide React** for icons
+- **React 18** - Modern UI framework
+- **TypeScript** - Type-safe development
+- **Tailwind CSS** - Utility-first styling
+- **Vite** - Fast build tool
+- **React Router** - Client-side routing
 
 ### Backend
-- **Laravel 10** with PHP 8.1+
-- **MySQL** database
-- **File storage** for images
-- **RESTful API** architecture
+- **Laravel 10** - PHP framework
+- **MySQL** - Database
+- **Eloquent ORM** - Database management
+- **RESTful API** - Clean API design
 
-## 📦 Installation
+## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+ and npm
-- PHP 8.1+ and Composer
+- Node.js 18+
+- PHP 8.1+
+- Composer
 - MySQL 8.0+
 
 ### Frontend Setup
@@ -62,36 +56,18 @@ php artisan db:seed
 php artisan serve
 ```
 
-## 🚀 Deployment
+## 🌐 Live Demo
 
-### Quick Deployment to Truehost cPanel
+- **Website**: [Your Domain]
+- **Admin Panel**: [Your Domain]/api/admin
+- **API**: [Your Domain]/api
 
-1. **Build the project:**
-   ```bash
-   # Frontend
-   cd zinlink_front/project
-   npm run build
-   
-   # Backend
-   cd admin_zinlink
-   composer install --optimize-autoloader --no-dev
-   ```
+## 🔑 Admin Access
 
-2. **Upload to cPanel:**
-   - Upload `zinlink_front/project/dist/` contents to `public_html/`
-   - Upload `admin_zinlink/` contents to `public_html/api/`
+- **Email**: admin@zinlinktech.com
+- **Password**: admin123
 
-3. **Configure environment:**
-   - Set up database in cPanel
-   - Update `.env` file with production settings
-   - Run `php artisan migrate` and `php artisan db:seed`
-
-4. **Set permissions:**
-   ```bash
-   chmod -R 755 storage/
-   chmod -R 755 bootstrap/cache/
-   php artisan storage:link
-   ```
+⚠️ **Change password immediately after deployment!**
 
 ## 📁 Project Structure
 
@@ -103,105 +79,42 @@ zinlink-tech/
 │   │   ├── pages/            # Page components
 │   │   ├── services/         # API services
 │   │   └── types/            # TypeScript types
-│   ├── public/               # Static assets
-│   └── dist/                 # Build output
+│   └── public/               # Static assets
 ├── admin_zinlink/            # Laravel backend
 │   ├── app/
 │   │   ├── Http/Controllers/ # API controllers
-│   │   └── Models/           # Eloquent models
+│   │   ├── Models/           # Eloquent models
+│   │   └── Providers/        # Service providers
 │   ├── database/
 │   │   ├── migrations/       # Database migrations
 │   │   └── seeders/          # Database seeders
-│   ├── resources/views/      # Admin views
-│   └── routes/               # API routes
+│   └── resources/views/      # Blade templates
 └── docs/                     # Documentation
 ```
 
-## 🔧 Configuration
+## 🚀 Deployment
 
-### Environment Variables
+### GitHub Actions (Recommended)
+This repository includes automated deployment to Truehost cPanel via GitHub Actions.
 
-#### Frontend (.env)
-```env
-VITE_API_BASE_URL=http://localhost:8000/api
-```
+### Manual Deployment
+See `DEPLOYMENT_GUIDE.md` for detailed manual deployment instructions.
 
-#### Backend (.env)
-```env
-APP_NAME="Zinlink Tech"
-APP_ENV=production
-APP_DEBUG=false
-APP_URL=https://yourdomain.com
+## 🤝 Contributing
 
-DB_CONNECTION=mysql
-DB_HOST=localhost
-DB_PORT=3306
-DB_DATABASE=your_database
-DB_USERNAME=your_username
-DB_PASSWORD=your_password
-```
-
-## 👥 Admin Access
-
-- **URL:** `/admin` or `/api/admin`
-- **Email:** `admin@zinlinktech.com`
-- **Password:** `admin123`
-
-⚠️ **Important:** Change the default password after first login!
-
-## 📱 Features Overview
-
-### For Customers
-- Browse products by category
-- Search and filter products
-- Add items to cart
-- Contact via WhatsApp
-- View team members
-- Read reviews
-
-### For Administrators
-- Manage products (add, edit, delete)
-- Upload product images
-- Manage team members with photos
-- Handle orders
-- Manage user reviews
-- Update site content
-
-## 🔒 Security Features
-
-- CSRF protection
-- SQL injection prevention
-- XSS protection
-- File upload validation
-- Secure authentication
-- HTTPS enforcement
-
-## 📊 Performance
-
-- Optimized images
-- Lazy loading
-- Code splitting
-- Gzip compression
-- Browser caching
-- CDN ready
-
-## 🆘 Support
-
-For technical support:
-- Check the [Deployment Guide](zinlink_front/project/DEPLOYMENT_GUIDE.md)
-- Review Laravel and React documentation
-- Contact your hosting provider
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
 
 ## 📄 License
 
-This project is proprietary software for Zinlink Tech.
+This project is licensed under the MIT License.
 
-## 🎉 Credits
+## 🆘 Support
 
-Built with ❤️ for Zinlink Tech - Professional Computer Solutions in Kisumu City, Kenya.
+For support, email support@zinlinktech.com or create an issue in this repository.
 
 ---
 
-**🌐 Live Demo:** [Your Domain Here]
-**📧 Contact:** info@zinlinktech.com
-**📱 WhatsApp:** +254 706 850 126 
+**Built with ❤️ by Zinlink Tech Team** 
