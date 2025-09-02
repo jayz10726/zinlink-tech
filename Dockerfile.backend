@@ -1,0 +1,21 @@
+# Use an official PHP base image
+FROM php:8.1-fpm-alpine
+
+# Install necessary extensions and system dependencies
+RUN apk add --no-cache \
+    nginx \
+    ... \
+    # Add other PHP extensions and system dependencies required by your app
+    # (e.g., pdo_mysql, mbstring, etc.)
+
+# Set the working directory inside the container
+WORKDIR /var/www/zinlink/project/admin_zinlink
+
+# Copy the source code
+COPY zinlink_project/admin_zinlink .
+
+# Expose the port the app runs on
+EXPOSE 8000
+
+# Command to run the application
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
