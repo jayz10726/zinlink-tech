@@ -152,15 +152,15 @@
         <!-- Credentials Info -->
         <div class="text-center">
             <div class="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
-                <p class="text-blue-100 text-sm font-medium mb-2">Default Admin Credentials</p>
+                <p class="text-blue-100 text-sm font-medium mb-2">only for admin</p>
                 <div class="flex items-center justify-center space-x-4 text-xs">
                     <div class="flex items-center space-x-2">
                         <i class="fas fa-envelope text-blue-300"></i>
-                        <span class="text-blue-200">admin@zinlinktech.com</span>
+                        <span class="text-blue-200">kindly keep off</span>
                     </div>
                     <div class="flex items-center space-x-2">
                         <i class="fas fa-key text-blue-300"></i>
-                        <span class="text-blue-200">password</span>
+                        <span class="text-blue-200">unauthorised access prohibited</span>
                     </div>
                 </div>
             </div>
@@ -169,7 +169,7 @@
         <!-- Footer -->
         <div class="text-center">
             <p class="text-blue-200/60 text-xs">
-                Secure access to zinlink tech administration panel
+                Secure access to zinlink tech from administration head
             </p>
         </div>
     </div>

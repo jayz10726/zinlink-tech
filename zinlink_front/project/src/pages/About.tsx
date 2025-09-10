@@ -27,7 +27,7 @@ const About = () => {
   // Fallback team members if API fails
   const fallbackTeamMembers = [
     {
-      name: "George smart",
+      name: "isaiah ndago",
       role: "Founder & Lead Technician",
       experience: "8+ years",
       specialty: "Chip-level repairs, Data Recovery"
@@ -110,22 +110,21 @@ const About = () => {
                 Our Story
               </h2>
               <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                zinlink techs was founded in 2019 with a simple mission: to provide reliable, 
-                affordable, and professional computer services to the people of Kisumu City and surrounding areas.
+                 Zinlinktech was Founded in December 2023 by Onyango Willis and Isaiah Ndago, Zinlink Tech is your trusted
+                partner for all things computing. We specialize in laptop sales, professional repairs, and
+                a wide selection of quality computer accessories.
               </p>
               <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                What started as a small repair shop has grown into a comprehensive computer solutions center, 
-                offering everything from chip-level laptop repairs to complete CCTV security systems.
+                At Zinlink Tech, our mission is simple: to make technology reliable, accessible, and affordable.
+                Whether you're dealing with a slow system, looking to upgrade your gear, or need expert advice,
+                we're here to help with honest service and real solutions.
               </p>
               <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                Located in the heart of Kisumu City at Wananchi Plaza, we've built our reputation on trust, 
-                quality workmanship, and exceptional customer service. Our team of certified technicians brings 
-                years of experience and a passion for technology to every project.
+                Driven by a passion for tech and a commitment to customer satisfaction, we’re proud to serve
+                students, professionals, and everyday users who rely on their devices to stay connected and productive.
               </p>
               <p className="text-lg text-gray-700 leading-relaxed">
-                Today, we're proud to be the go-to destination for computer sales, repairs, and technical 
-                services in Kisumu, serving hundreds of satisfied customers including students, professionals, 
-                and businesses.
+                Tech made easy. Service you can trust. Welcome to Zinlink Tech.
               </p>
             </div>
             <div className="bg-white rounded-2xl shadow-lg p-8">
@@ -233,7 +232,7 @@ const About = () => {
               
               return (
                 <div key={index} className="group relative">
-                  <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden">
+                  <div className="bgbg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden">
                     {/* Photo Section */}
                     <div className="relative h-64 bg-gradient-to-br from-blue-500 to-purple-600">
                       {isApiMember && member.photo_url ? (

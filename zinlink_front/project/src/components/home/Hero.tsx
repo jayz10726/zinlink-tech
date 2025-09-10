@@ -40,7 +40,7 @@ const Hero = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev + 1) % carouselImages.length);
-    }, 4000); // 4 seconds per image
+    }, 2400); // 2.5 seconds per image (faster)
     return () => clearInterval(interval);
   }, [carouselImages.length]);
 
@@ -53,11 +53,11 @@ const Hero = () => {
           src={img.url}
           alt={img.alt}
           className={`absolute inset-0 w-full h-full object-cover object-center z-0 transition-opacity duration-1000 ${current === idx ? 'opacity-100' : 'opacity-0'}`}
-          style={{ filter: 'brightness(0.5) blur(1px)', transform: `translate3d(${parallax.x}px, ${parallax.y}px, 0)` }}
+          style={{ filter: 'none', transform: `translate3d(${parallax.x}px, ${parallax.y}px, 0)` }}
         />
       ))}
       {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/40 to-blue-900/60 z-10" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/70 z-10 mix-blend-multiply" />
       {/* Content */}
       <div className="relative z-20 w-full max-w-3xl mx-auto text-center px-4 py-24">
         <div className="inline-flex items-center px-6 py-2 rounded-full bg-white/20 backdrop-blur-sm text-white text-base font-semibold border border-white/30 mb-8 shadow-lg">
@@ -65,7 +65,7 @@ const Hero = () => {
           Your Local Tech Experts
         </div>
         <motion.h1
-          className="text-5xl md:text-6xl font-extrabold mb-6 drop-shadow-lg leading-tight bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 bg-clip-text text-transparent animate-gradient-move"
+          className="text-5xl md:text-6xl font-extrabold mb-6 leading-tight text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.7)]"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
@@ -73,7 +73,7 @@ const Hero = () => {
           Professional Computer Solutions
         </motion.h1>
         <motion.p
-          className="text-xl md:text-2xl text-gray-200 mb-10 max-w-2xl mx-auto"
+          className="text-xl md:text-2xl text-gray-100 mb-10 max-w-2xl mx-auto drop-shadow-[0_3px_10px_rgba(0,0,0,0.6)]"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 1 }}

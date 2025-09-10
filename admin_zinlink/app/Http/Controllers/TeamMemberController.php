@@ -54,16 +54,16 @@ class TeamMemberController extends Controller
 
         try {
             $member = TeamMember::create([
-                'name' => $validated['name'],
-                'role' => $validated['role'] ?? null,
-                'bio' => $validated['bio'] ?? null,
-                'photo_url' => $photoUrl,
-                'sort_order' => $validated['sort_order'] ?? 0,
-                'is_active' => $request->boolean('is_active', true),
-            ]);
+            'name' => $validated['name'],
+            'role' => $validated['role'] ?? null,
+            'bio' => $validated['bio'] ?? null,
+            'photo_url' => $photoUrl,
+            'sort_order' => $validated['sort_order'] ?? 0,
+            'is_active' => $request->boolean('is_active', true),
+        ]);
 
             \Log::info('Team member created successfully', ['member_id' => $member->id]);
-            return redirect()->back()->with('success', 'Team member created.');
+        return redirect()->back()->with('success', 'Team member created.');
         } catch (\Exception $e) {
             \Log::error('Failed to create team member', ['error' => $e->getMessage()]);
             return redirect()->back()->with('error', 'Failed to create team member: ' . $e->getMessage());
