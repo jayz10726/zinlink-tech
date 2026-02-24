@@ -333,11 +333,11 @@ const About = () => {
                 </div>
                 <div className="flex items-center space-x-3">
                   <Phone className="w-5 h-5" />
-                  <span>0706850126</span>
+                  <span>0746049506</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Mail className="w-5 h-5" />
-                  <span>info@zinlink techs.com</span>
+                  <span>zinlinktech@gmail.com</span>
                 </div>
               </div>
             </div>

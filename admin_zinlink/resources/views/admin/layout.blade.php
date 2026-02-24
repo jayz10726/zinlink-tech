@@ -256,7 +256,7 @@
                             <input type="text" placeholder="Search..." class="w-64 px-4 py-2 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-700 text-white placeholder-gray-400">
                         </div>
                         
-                        <a href="http://localhost:5173" 
+                        <a href="https://zinlinktech.xyz" 
                            target="_blank" 
                            rel="noopener noreferrer"
                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center"

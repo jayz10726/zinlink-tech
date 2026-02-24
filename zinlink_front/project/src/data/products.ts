@@ -32,7 +32,7 @@ export const updateProductsWithBackendImages = async (products: Product[]): Prom
           ...product,
           image: backendImage.image_url.startsWith('http') 
             ? backendImage.image_url 
-            : `http://localhost:8000/storage/${backendImage.image_url}`
+           : `https://admin.zinlinktech.xyz/storage/${backendImage.image_url}`
         };
       }
       return product;

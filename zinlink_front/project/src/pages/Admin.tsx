@@ -429,7 +429,7 @@ const Admin: React.FC<AdminProps> = () => {
                         {product.image_url && (
                           <img
                             className="h-10 w-10 rounded-full object-cover mr-3"
-                            src={product.image_url.startsWith('http') ? product.image_url : `http://localhost:8000${product.image_url}`}
+                            src={product.image_url.startsWith('http') ? product.image_url : `${import.meta.env.VITE_API_BASE_URL.replace('/api', '')}${product.image_url}`}
                             alt={product.name}
                           />
                         )}
