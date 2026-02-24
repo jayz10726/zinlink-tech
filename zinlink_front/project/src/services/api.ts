@@ -1,4 +1,4 @@
-const API_BASE_URL = '/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 export interface ApiProduct {
   id: number;
@@ -152,7 +152,7 @@ export interface CreateOrderData {
 }
 
 export async function createOrder(data: CreateOrderData) {
-  const response = await fetch('http://localhost:8000/api/orders', {
+  const response = await fetch(`${API_BASE_URL}/orders`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),

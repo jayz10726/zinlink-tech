@@ -77,7 +77,7 @@ const Header = () => {
 
     try {
       // Send password to backend for verification
-      const response = await fetch('http://localhost:8000/api/verify-admin', {
+      const response = await fetch('https://admin.zinlinktech.xyz/api/verify-admin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -89,7 +89,7 @@ const Header = () => {
         // Password correct - redirect to admin panel
         setShowPasswordModal(false);
         setAdminPassword('');
-        window.open('http://localhost:8000/admin', '_blank');
+        window.open('https://admin.zinlinktech.xyz/admin', '_blank');
       } else {
         // Password incorrect
         setPasswordError('Incorrect password. Please try again.');
